@@ -18,7 +18,14 @@ import datetime
 import hashlib
 import fnmatch
 import re
+import ssl
+import certifi
 
+# Global SSL context using certifi CA bundle
+SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+
+# Override urllib's default HTTPS context globally
+ssl._create_default_https_context = lambda: SSL_CONTEXT
 
 class PackBuilder:
     """Handles Pack Builder functionality"""
@@ -1049,7 +1056,8 @@ class PackBuilder:
                                 url = asset['browser_download_url']
                                 filename = Path(temp_dir) / asset['name']
                                 log(f"  Downloading: {url}")
-                                urllib.request.urlretrieve(url, filename)
+                                with urllib.request.urlopen(url, context=SSL_CONTEXT) as response, open(filename, "wb") as out_file:
+                                    out_file.write(response.read())
                                 log(f"  ✅ Downloaded to: {filename.name}")
                                 return filename
                         log(f"  ❌ Asset matching '{pattern}' not found in release {target_release.get('tag_name')}.")
@@ -1072,7 +1080,8 @@ class PackBuilder:
             filepath = Path(temp_dir) / filename
             log(f"  Downloading from direct URL: {url}")
             try:
-                urllib.request.urlretrieve(url, filepath)
+                with urllib.request.urlopen(url, context=SSL_CONTEXT) as response, open(filepath, "wb") as out_file:
+                    out_file.write(response.read())
                 log(f"  ✅ Downloaded to: {filename}")
 
                 # Extract version from URL (e.g., /658/ -> 658, /v1.2.3/ -> v1.2.3)
