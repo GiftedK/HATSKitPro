@@ -27,6 +27,28 @@ SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 # Override urllib's default HTTPS context globally
 ssl._create_default_https_context = lambda: SSL_CONTEXT
 
+def parse_version(tag):
+    """
+    Convert version tag into comparable tuple.
+    Accepts formats like v1.2.3, 1.2, 2.0.0-beta, etc.
+    """
+    if not tag:
+        return (0,)
+
+    # Remove leading 'v' or 'V'
+    tag = tag.lstrip("vV")
+
+    # Extract numeric version only
+    match = re.match(r"(\d+)(?:\.(\d+))?(?:\.(\d+))?", tag)
+    if not match:
+        return (0,)
+
+    major = int(match.group(1)) if match.group(1) else 0
+    minor = int(match.group(2)) if match.group(2) else 0
+    patch = int(match.group(3)) if match.group(3) else 0
+
+    return (major, minor, patch)
+    
 class PackBuilder:
     """Handles Pack Builder functionality"""
 
@@ -624,8 +646,15 @@ class PackBuilder:
                     if response.status == 200:
                         releases = json.loads(response.read().decode())
                         if releases:
-                            latest_release = releases[0]
-                            latest_version = latest_release.get('tag_name')
+                            # Sort releases by semantic version, highest first
+                            releases_sorted = sorted(
+                                releases,
+                                key=lambda r: parse_version(r.get("tag_name", "")),
+                                reverse=True
+                            )
+                        
+                            latest_release = releases_sorted[0]
+                            latest_version = latest_release.get("tag_name")
 
                             if latest_version:
                                 log(f"  -> Found latest version: {latest_version}")
