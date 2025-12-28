@@ -15,7 +15,6 @@ HATSKit Pro is a comprehensive Windows application that simplifies the process o
 ### Pack Builder
 - Select from a library of available components
 - Search and filter components by category
-- Preview selected components before building
 - Fetch latest version information from GitHub
 - Build custom HATS packs with your chosen components
 - Automatic version detection and download
@@ -23,7 +22,7 @@ HATSKit Pro is a comprehensive Windows application that simplifies the process o
 ### Component Editor
 - View and edit component definitions
 - Add new components to the library
-- Configure download sources (GitHub releases or direct URLs)
+- Configure download sources (GitHub releases, GitHub Tag or direct URLs)
 - Define processing steps for each component
 - Manage component metadata (name, category, description)
 - Support for multiple source types and asset patterns
@@ -48,7 +47,7 @@ HATSKit Pro is a comprehensive Windows application that simplifies the process o
 
 ### Using the Python Launcher (Recommended)
 
-1. Download the latest release from the [Releases page](https://github.com/sthetix/HATSKitPro/releases)
+1. Download the latest release from the [Releases page](https://github.com/GiftedK/HATSKitPro/releases)
 2. Extract the downloaded archive to your desired location
 3. Double-click `HATSKitPro.exe` to launch the application
 
@@ -68,8 +67,8 @@ If you prefer to run from source:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/sthetix/HATSKitPro.git
-cd HATSKit-Pro
+git clone https://github.com/GiftedK/HATSKitPro.git
+cd HATSKitPro
 ```
 
 2. Install Python 3.8 or higher (if not already installed)
@@ -266,7 +265,7 @@ For issues, questions, or suggestions:
 
 ---
 
-### Support My Work
+### Support Sthetix's Work
 
 If you find this project useful, please consider supporting me by buying me a coffee!
 
